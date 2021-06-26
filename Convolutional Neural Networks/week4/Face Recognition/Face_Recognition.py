@@ -88,8 +88,9 @@ def triplet_loss(y_true, y_pred, alpha=0.2):
     # Step 2: Compute the (encoding) distance between the anchor and the negative, you will need to sum over axis=-1
     neg_dist = tf.reduce_sum(tf.square(tf.substract(anchor, negative)), axis=-1)
     # Step 3: subtract the two previous distances and add alpha.
+    basic_loss = tf.add(tf.subtract(pos_dist, neg_dist), alpha)
     # Step 4: Take the maximum of basic_loss and 0.0. Sum over the training examples.
-    loss = tf.reduce_sum(basic_loss)
+    loss = tf.reduce_sum(tf.maximum(basic_loss,0))
 
     return loss
 
